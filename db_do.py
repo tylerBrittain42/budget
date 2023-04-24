@@ -2,17 +2,23 @@ import sys
 from dotenv import dotenv_values
 from sqlalchemy import create_engine, MetaData
 from sqlalchemy.engine.base import Engine
-
+import models
 
 
 def main():
 
+
     commands = {'create':create_all, 'drop':drop_all, 'reset':reset,}
 
     try:
-        commands[sys.argv[1]]()
-    except:
-        print('no or invalud arg(s) provided')
+        config = dotenv_values()
+        connection_string = f'mysql+mysqlconnector://{config["USERNAME"]}:{config["PASSWORD"]}@{config["HOST"]}:{config["PORT"]}/{config["DATABASE"]}'
+        print(connection_string)
+
+        engine = create_engine(connection_string, echo=True)
+        commands[sys.argv[1]](models.Base.metadata,engine)
+    except Exception as e:
+        print(e)
 
     
 
