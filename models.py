@@ -95,10 +95,9 @@ class Line_item(Base):
     reason: Mapped[str] = mapped_column(String(30))
     category_id: Mapped[int]
     u_id: Mapped[int] 
+    
 
-
-
-    def __repr__(self) -> str:
+    # def __repr__(self) -> str:
 
 
 
