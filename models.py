@@ -21,6 +21,7 @@ class User(Base):
     __tablename__ = 'user'
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(30))
+    incomes: Mapped[List["Income"]] = relationship(back_populates="user")
 
     def __repr__(self) -> str:
         return f'<user:{self.name}, id:{self.id}>'
@@ -29,9 +30,10 @@ class User(Base):
 class Income(Base):
     __tablename__ = 'income'
     id: Mapped[int] = mapped_column(primary_key=True)
+    u_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
+    user: Mapped["User"] = relationship(back_populates="income")
     date: Mapped[datetime.date]
     amount: Mapped[int]
-    u_id: Mapped[int] = mapped_column(primary_key=True)
 
     def __repr__(self) -> str:
         return f'<income:{self.amount}, date:{self.date}>'
