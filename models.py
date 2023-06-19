@@ -35,7 +35,7 @@ class User(Base):
 class Income(Base):
     __tablename__ = 'income'
     id: Mapped[int] = mapped_column(primary_key=True)
-    date: Mapped[datetime.date]
+    date: Mapped[datetime.date] = mapped_column(default=datetime.datetime.now())
     amount: Mapped[int]
     u_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     user: Mapped['User'] = relationship(back_populates="income_sources")
@@ -60,7 +60,7 @@ class Ratio(Base):
 
     # is the primary key line neccessary for this table?
     id: Mapped[int] = mapped_column(primary_key=True)
-    # c_id: Mapped[int] 
+    c_id: Mapped[int] = mapped_column(ForeignKey('category.id'))
     u_id: Mapped[int] = mapped_column(ForeignKey('user.id'))
     ratio: Mapped[float] 
     
