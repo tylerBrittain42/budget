@@ -37,7 +37,7 @@ class TestDbDo:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == 0
 
-        os.system("python db_do.py create a")
+        os.system(f'python db_do.py create {connection_string}')
         with self.engine.connect() as conn:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == self.EXPECTED_TABLES
@@ -48,7 +48,7 @@ class TestDbDo:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) != 0
 
-        os.system("python db_do.py drop a")
+        os.system(f'python db_do.py drop {connection_string}')
         with self.engine.connect() as conn:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == 0
@@ -59,7 +59,7 @@ class TestDbDo:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == 0
 
-        os.system("python db_do.py reset a")
+        os.system(f'python db_do.py reset {connection_string}')
         with self.engine.connect() as conn:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == self.EXPECTED_TABLES

@@ -4,7 +4,6 @@ from sqlalchemy import create_engine, MetaData
 from sqlalchemy.orm import Session
 from sqlalchemy.engine.base import Engine
 from models import models
-import datetime
 
 
 def main():
@@ -15,8 +14,8 @@ def main():
     config = dotenv_values()
     # print(connection_string)
     if len(sys.argv) > 2:
-        print('using alternative db')
-        connection_string = 'sqlite:///tests/db.sqlite'
+        print(f'using {sys.argv[2]}')
+        connection_string = sys.argv[2]
     else:
         print('using postgres db')
         connection_string = f'postgresql+psycopg2://{config["USERNAME"]}:{config["PASSWORD"]}@{config["HOST"]}:{config["PORT"]}/{config["DATABASE"]}'
