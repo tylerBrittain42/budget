@@ -4,7 +4,7 @@ from sqlalchemy import create_engine, text
 from models import models
 
 connection_string = 'sqlite:///tests/db.sqlite'
-# TODO change 'a' to connection string. Adjust script to read input for connection string
+
 
 @pytest.fixture
 def database_clear():
@@ -64,9 +64,28 @@ class TestDbDo:
             results = conn.execute(text('select * from sqlite_master'))
         assert len(results.all()) == self.EXPECTED_TABLES
 
-        #TODO add populate test
-
         return
 
-    def populate(self, data):
+    def test_populate(self, database_create_tables):
+        # expected output
+        EXPECTED_USER = {
+                'name': 'test_user_1',
+                }
+        EXPECTED_INCOME = {
+                'amount': 500
+                }
+        # confirming db has not been emptied
+        with self.engine.connect() as conn:
+            results = conn.execute(text('select * from sqlite_master'))
+        assert len(results.all()) != 0
+
+        os.system(f'python db_do.py populate {connection_string}')
+        with self.engine.connect() as conn:
+            user_result = conn.execute(text("select * from User")).one()
+            income_result = conn.execute(text("select * from Income")).one()
+            print(user_result.name)
+
+        assert user_result.name == EXPECTED_USER['name']
+        assert income_result.amount == EXPECTED_INCOME['amount']
+        # assert user_results is None
         return
