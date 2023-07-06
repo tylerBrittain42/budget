@@ -7,8 +7,13 @@ from models import models
 
 
 def main():
-    
-    commands = {'create': create_all, 'drop': drop_all, 'reset': reset, 'populate': create_dummy_data}
+
+    commands = {
+            'create': create_all,
+            'drop': drop_all,
+            'reset': reset,
+            'populate': create_dummy_data
+            }
 
     # try:
     config = dotenv_values()
@@ -18,7 +23,7 @@ def main():
         connection_string = sys.argv[2]
     else:
         print('using postgres db')
-        connection_string = f'postgresql+psycopg2://{config["USERNAME"]}:{config["PASSWORD"]}@{config["HOST"]}:{config["PORT"]}/{config["DATABASE"]}'
+        connection_string = f'postgresql+psycopg2://{config["USERNAME"]}:{config["PASSWORD"]}@{config["HOST"]}:{config["PORT"]}/{config["DATABASE"]}' # noqa
 
     engine = create_engine(connection_string, echo=False)
     commands[sys.argv[1]](models.Base.metadata, engine)
@@ -55,7 +60,8 @@ def create_dummy_data(meta: MetaData, engine: Engine) -> None:
 def reset(meta: MetaData, engine: Engine):
     meta.drop_all(engine)
     meta.create_all(engine)
-    create_dummy_data(meta, engine)
+    # deciding that a reset database should not have dummy data
+    # create_dummy_data(meta, engine)
 
 
 if __name__ == '__main__':
